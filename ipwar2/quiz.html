@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(90deg, #ff8000 0%, #006400 90%);
+      color: #fff;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .question {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      border: 3px solid transparent;
+      position: relative;
+    }
+
+    .question h3 {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    label:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .unanswered {
+      border-color: rgb(243, 81, 81);
+    }
+
+    .correct-border {
+      border-color: limegreen;
+    }
+
+    .wrong-border {
+      border-color: rgb(243, 81, 81);
+    }
+
+    .correct-answer {
+      background-color: limegreen !important;
+      color: white;
+    }
+
+    .wrong-answer {
+      background-color: rgb(243, 81, 81) !important;
+      color: white;
+    }
+
+    .correct-text {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: rgb(255, 255, 255);
+    }
+
+    button {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid rgb(255, 255, 255);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: block;
+  margin: 2rem auto 0;
+  transition: background 0.3s ease;
+}
+
+   
+
+    @media (max-width: 600px) {
+      body {
+        background: linear-gradient(#FF9933, #006400);
+      }
+    }
+   
+
+  </style>
+</head>
+<body>
+  <video autoplay muted loop playsinline id="bg-video">
+  <source src="videos/ipbg.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+<style>
+  #bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.3; 
+  filter: blur(4px); 
+  pointer-events: none;
+}
+
+
+
+</style>
+<script>
+  const video = document.getElementById("bg-video");
+  video.playbackRate = 0.4; // Slow motion (0.5x speed)
+  // video.playbackRate = 1.5; // Faster (1.5x speed)
+  // You can change this value to 0.25, 0.75, 2, etc.
+</script>
+
+<!-- Back Button -->
+<a href="index.html" class="back-button">BACK TO HOME</a>
+
+<style>
+  .back-button {
+    --border-radius: 150px;
+    --border-width: 4px;
+    appearance: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 1em 1em;
+    border: 0;
+    background-color: transparent;
+    font-family: "Roboto", Arial, "Segoe UI", sans-serif;
+    font-size: 10px;
+    font-weight: 100;
+    color: #ffffff;
+    text-decoration: none;
+    z-index: 999;
+    box-sizing: border-box;
+    top: 30px;
+left: 20px;
+
+  }
+
+  .back-button::after {
+    --m-i: linear-gradient(#000, #000);
+    --m-o: content-box, padding-box;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: var(--border-width);
+    border-radius: var(--border-radius);
+    background-image: conic-gradient(
+      #488cfb,
+      #29dbbc,
+      #ddf505,
+      #ff9f0e,
+      #e440bb,
+      #655adc,
+      #488cfb
+    );
+    -webkit-mask-image: var(--m-i), var(--m-i);
+    mask-image: var(--m-i), var(--m-i);
+    -webkit-mask-origin: var(--m-o);
+    mask-origin: var(--m-o);
+    -webkit-mask-clip: var(--m-o);
+    mask-composite: exclude;
+    -webkit-mask-composite: destination-out;
+    filter: hue-rotate(0);
+    animation: rotate-hue linear 500ms infinite;
+    animation-play-state: paused;
+    z-index: -1;
+  }
+
+  .back-button:hover::after {
+    animation-play-state: running;
+  }
+.back-button {
+  /* existing styles */
+  padding: 1.7em 1em 1em 1.7em; /* top right bottom left */
+}
+
+  @keyframes rotate-hue {
+    to {
+      filter: hue-rotate(1turn);
+    }
+  }
+  @media (max-width: 600px) {
+  .back-button {
+    display: none;
+  }
+}
+
+</style>
+
+
+  <header>
+    INDIA VS PAKISTAN WARS QUIZ
+  </header>
+
+  <div class="container">
+    <form id="quiz-form">
+
+      <div class="question" data-q="q1">
+        <h3>1. When did the first India-Pakistan war occur?</h3>
+        <label><input type="radio" name="q1" value="a"> 1947</label>
+        <label><input type="radio" name="q1" value="b"> 1965</label>
+        <label><input type="radio" name="q1" value="c"> 1971</label>
+        <label><input type="radio" name="q1" value="d"> 1999</label>
+      </div>
+
+      <div class="question" data-q="q2">
+        <h3>2. What was the 1971 war mainly about?</h3>
+        <label><input type="radio" name="q2" value="a"> Kashmir conflict</label>
+        <label><input type="radio" name="q2" value="b"> East Pakistan liberation</label>
+        <label><input type="radio" name="q2" value="c"> Nuclear tests</label>
+        <label><input type="radio" name="q2" value="d"> Border dispute</label>
+      </div>
+
+      <div class="question" data-q="q3">
+        <h3>3. Which operation was launched by India in the Kargil War?</h3>
+        <label><input type="radio" name="q3" value="a"> Operation Blue Star</label>
+        <label><input type="radio" name="q3" value="b"> Operation Vijay</label>
+        <label><input type="radio" name="q3" value="c"> Operation Meghdoot</label>
+        <label><input type="radio" name="q3" value="d"> Operation Shakti</label>
+      </div>
+
+      <div class="question" data-q="q4">
+        <h3>4. Which country helped India in the 1971 war diplomatically?</h3>
+        <label><input type="radio" name="q4" value="a"> USA</label>
+        <label><input type="radio" name="q4" value="b"> China</label>
+        <label><input type="radio" name="q4" value="c"> Russia (USSR)</label>
+        <label><input type="radio" name="q4" value="d"> France</label>
+      </div>
+
+      <div class="question" data-q="q5">
+  <h3>5. What was the main cause of the Kargil War?</h3>
+  <label><input type="radio" name="q5" value="a"> India's nuclear tests</label>
+  <label><input type="radio" name="q5" value="b"> Pakistani soldiers crossing the Line of Control</label>
+  <label><input type="radio" name="q5" value="c"> Attack on Indian Parliament</label>
+  <label><input type="radio" name="q5" value="d"> Kashmir elections</label>
+</div>
+<!--
+<div class="question" data-q="q6">
+  <h3>6. Which year did the Kargil War take place?</h3>
+  <label><input type="radio" name="q6" value="a"> 1998</label>
+  <label><input type="radio" name="q6" value="b"> 1999</label>
+  <label><input type="radio" name="q6" value="c"> 2000</label>
+  <label><input type="radio" name="q6" value="d"> 2001</label>
+</div>
+
+<div class="question" data-q="q7">
+  <h3>7. Who was the Prime Minister of India during the Kargil War?</h3>
+  <label><input type="radio" name="q7" value="a"> Rajiv Gandhi</label>
+  <label><input type="radio" name="q7" value="b"> Atal Bihari Vajpayee</label>
+  <label><input type="radio" name="q7" value="c"> P.V. Narasimha Rao</label>
+  <label><input type="radio" name="q7" value="d"> Manmohan Singh</label>
+</div>
+
+<div class="question" data-q="q8">
+  <h3>8. What was the code name of the Indian air strikes during the Kargil War?</h3>
+  <label><input type="radio" name="q8" value="a"> Operation Meghdoot</label>
+  <label><input type="radio" name="q8" value="b"> Operation Safed Sagar</label>
+  <label><input type="radio" name="q8" value="c"> Operation Shakti</label>
+  <label><input type="radio" name="q8" value="d"> Operation Brasstacks</label>
+</div>
+
+<div class="question" data-q="q9">
+  <h3>9. In which region was the Kargil War primarily fought?</h3>
+  <label><input type="radio" name="q9" value="a"> Punjab</label>
+  <label><input type="radio" name="q9" value="b"> Rajasthan</label>
+  <label><input type="radio" name="q9" value="c"> Kargil sector, Jammu & Kashmir</label>
+  <label><input type="radio" name="q9" value="d"> Ladakh (Eastern sector)</label>
+</div>
+
+<div class="question" data-q="q10">
+  <h3>10. Who was the Army Chief of India during the 1999 Kargil conflict?</h3>
+  <label><input type="radio" name="q10" value="a"> Bipin Rawat</label>
+  <label><input type="radio" name="q10" value="b"> Ved Prakash Malik</label>
+  <label><input type="radio" name="q10" value="c"> Sam Manekshaw</label>
+  <label><input type="radio" name="q10" value="d"> General Sundarji</label>
+</div>
+
+<div class="question" data-q="q11">
+  <h3>11. Which international body called for a ceasefire during the 1947 war?</h3>
+  <label><input type="radio" name="q11" value="a"> NATO</label>
+  <label><input type="radio" name="q11" value="b"> SAARC</label>
+  <label><input type="radio" name="q11" value="c"> United Nations</label>
+  <label><input type="radio" name="q11" value="d"> ASEAN</label>
+</div>
+
+<div class="question" data-q="q12">
+  <h3>12. Who was the President of Pakistan during the 1971 war?</h3>
+  <label><input type="radio" name="q12" value="a"> Zia-ul-Haq</label>
+  <label><input type="radio" name="q12" value="b"> Pervez Musharraf</label>
+  <label><input type="radio" name="q12" value="c"> Yahya Khan</label>
+  <label><input type="radio" name="q12" value="d"> Ayub Khan</label>
+</div>
+
+<div class="question" data-q="q13">
+  <h3>13. What was the outcome of the 1971 war?</h3>
+  <label><input type="radio" name="q13" value="a"> Pakistan gained Kashmir</label>
+  <label><input type="radio" name="q13" value="b"> India lost Siachen</label>
+  <label><input type="radio" name="q13" value="c"> Formation of Bangladesh</label>
+  <label><input type="radio" name="q13" value="d"> Ceasefire agreement</label>
+</div>
+
+<div class="question" data-q="q14">
+  <h3>14. Which Indian armed force conducted Operation Trident in 1971?</h3>
+  <label><input type="radio" name="q14" value="a"> Indian Army</label>
+  <label><input type="radio" name="q14" value="b"> Indian Navy</label>
+  <label><input type="radio" name="q14" value="c"> Indian Air Force</label>
+  <label><input type="radio" name="q14" value="d"> Border Security Force</label>
+</div>
+
+<div class="question" data-q="q15">
+  <h3>15. When is Vijay Diwas celebrated in India?</h3>
+  <label><input type="radio" name="q15" value="a"> 15th August</label>
+  <label><input type="radio" name="q15" value="b"> 26th January</label>
+  <label><input type="radio" name="q15" value="c"> 16th December</label>
+  <label><input type="radio" name="q15" value="d"> 3rd December</label>
+</div>
+
+<div class="question" data-q="q16">
+  <h3>16. Which river was a major geographical barrier in the 1965 war?</h3>
+  <label><input type="radio" name="q16" value="a"> Indus</label>
+  <label><input type="radio" name="q16" value="b"> Brahmaputra</label>
+  <label><input type="radio" name="q16" value="c"> Jhelum</label>
+  <label><input type="radio" name="q16" value="d"> Ravi</label>
+</div>
+
+<div class="question" data-q="q17">
+  <h3>17. Who led the Indian Army in the 1971 Bangladesh Liberation War?</h3>
+  <label><input type="radio" name="q17" value="a"> General Arjun Singh</label>
+  <label><input type="radio" name="q17" value="b"> General Cariappa</label>
+  <label><input type="radio" name="q17" value="c"> General Sam Manekshaw</label>
+  <label><input type="radio" name="q17" value="d"> General Sunderji</label>
+</div>
+
+<div class="question" data-q="q18">
+  <h3>18. What was the Simla Agreement?</h3>
+  <label><input type="radio" name="q18" value="a"> Treaty for trade</label>
+  <label><input type="radio" name="q18" value="b"> Ceasefire deal after 1971 war</label>
+  <label><input type="radio" name="q18" value="c"> Cultural exchange pact</label>
+  <label><input type="radio" name="q18" value="d"> Air route treaty</label>
+</div>
+
+<div class="question" data-q="q19">
+  <h3>19. Which city was heavily bombed by the Indian Air Force in 1971?</h3>
+  <label><input type="radio" name="q19" value="a"> Lahore</label>
+  <label><input type="radio" name="q19" value="b"> Islamabad</label>
+  <label><input type="radio" name="q19" value="c"> Karachi</label>
+  <label><input type="radio" name="q19" value="d"> Rawalpindi</label>
+</div>
+
+<div class="question" data-q="q20">
+  <h3>20. What is the Line of Control (LoC)?</h3>
+  <label><input type="radio" name="q20" value="a"> International border</label>
+  <label><input type="radio" name="q20" value="b"> Railway track</label>
+  <label><input type="radio" name="q20" value="c"> Ceasefire boundary in Kashmir</label>
+  <label><input type="radio" name="q20" value="d"> Highway connection</label>
+</div>
+
+<div class="question" data-q="q21">
+  <h3>21. What role did Mukti Bahini play in 1971?</h3>
+  <label><input type="radio" name="q21" value="a"> Indian army regiment</label>
+  <label><input type="radio" name="q21" value="b"> Pakistani navy unit</label>
+  <label><input type="radio" name="q21" value="c"> East Pakistani rebel force</label>
+  <label><input type="radio" name="q21" value="d"> UN peacekeeping force</label>
+</div>
+
+<div class="question" data-q="q22">
+  <h3>22. Where did the ceasefire agreement of 1965 take place?</h3>
+  <label><input type="radio" name="q22" value="a"> New Delhi</label>
+  <label><input type="radio" name="q22" value="b"> Lahore</label>
+  <label><input type="radio" name="q22" value="c"> Tashkent</label>
+  <label><input type="radio" name="q22" value="d"> Geneva</label>
+</div>
+
+<div class="question" data-q="q23">
+  <h3>23. Who was the Indian PM during the 1971 war?</h3>
+  <label><input type="radio" name="q23" value="a"> Jawaharlal Nehru</label>
+  <label><input type="radio" name="q23" value="b"> Indira Gandhi</label>
+  <label><input type="radio" name="q23" value="c"> Morarji Desai</label>
+  <label><input type="radio" name="q23" value="d"> Lal Bahadur Shastri</label>
+</div>
+
+<div class="question" data-q="q24">
+  <h3>24. What is the significance of Operation Meghdoot?</h3>
+  <label><input type="radio" name="q24" value="a"> 1971 airstrike</label>
+  <label><input type="radio" name="q24" value="b"> Capture of Siachen Glacier</label>
+  <label><input type="radio" name="q24" value="c"> Naval blockade of Karachi</label>
+  <label><input type="radio" name="q24" value="d"> Strike on Kargil</label>
+</div>
+<div class="question" data-q="q25">
+  <h3>25. Who was the Pakistani leader during the 1971 war?</h3>
+  <label><input type="radio" name="q25" value="a"> Zulfikar Ali Bhutto</label>
+  <label><input type="radio" name="q25" value="b"> Pervez Musharraf</label>
+  <label><input type="radio" name="q25" value="c"> Yahya Khan</label>
+  <label><input type="radio" name="q25" value="d"> Nawaz Sharif</label>
+</div>
+
+<div class="question" data-q="q26">
+  <h3>26. What was Operation Trident in 1971?</h3>
+  <label><input type="radio" name="q26" value="a"> Army attack on Lahore</label>
+  <label><input type="radio" name="q26" value="b"> Airstrike in Kashmir</label>
+  <label><input type="radio" name="q26" value="c"> Naval attack on Karachi</label>
+  <label><input type="radio" name="q26" value="d"> Capture of Dhaka</label>
+</div>
+
+<div class="question" data-q="q27">
+  <h3>27. Which war led to the creation of Bangladesh?</h3>
+  <label><input type="radio" name="q27" value="a"> 1947 war</label>
+  <label><input type="radio" name="q27" value="b"> 1965 war</label>
+  <label><input type="radio" name="q27" value="c"> 1971 war</label>
+  <label><input type="radio" name="q27" value="d"> Kargil war</label>
+</div>
+
+<div class="question" data-q="q28">
+  <h3>28. What is Siachen Glacier known for?</h3>
+  <label><input type="radio" name="q28" value="a"> Oil reserves</label>
+  <label><input type="radio" name="q28" value="b"> Highest battlefield</label>
+  <label><input type="radio" name="q28" value="c"> Cultural site</label>
+  <label><input type="radio" name="q28" value="d"> Nuclear base</label>
+</div>
+
+<div class="question" data-q="q29">
+  <h3>29. Who signed the Tashkent Agreement from India’s side?</h3>
+  <label><input type="radio" name="q29" value="a"> Lal Bahadur Shastri</label>
+  <label><input type="radio" name="q29" value="b"> Indira Gandhi</label>
+  <label><input type="radio" name="q29" value="c"> Jawaharlal Nehru</label>
+  <label><input type="radio" name="q29" value="d"> Morarji Desai</label>
+</div>
+
+<div class="question" data-q="q30">
+  <h3>30. When did Kargil War take place?</h3>
+  <label><input type="radio" name="q30" value="a"> 1997</label>
+  <label><input type="radio" name="q30" value="b"> 1999</label>
+  <label><input type="radio" name="q30" value="c"> 2001</label>
+  <label><input type="radio" name="q30" value="d"> 2003</label>
+</div>
+
+<div class="question" data-q="q31">
+  <h3>31. Who was the Indian Army Chief during Kargil War?</h3>
+  <label><input type="radio" name="q31" value="a"> General Bipin Rawat</label>
+  <label><input type="radio" name="q31" value="b"> General Dalbir Singh</label>
+  <label><input type="radio" name="q31" value="c"> General Ved Prakash Malik</label>
+  <label><input type="radio" name="q31" value="d"> General Sundararajan Padmanabhan</label>
+</div>
+
+<div class="question" data-q="q32">
+  <h3>32. What was India’s strategy in Kargil War?</h3>
+  <label><input type="radio" name="q32" value="a"> Full invasion</label>
+  <label><input type="radio" name="q32" value="b"> Air strikes only</label>
+  <label><input type="radio" name="q32" value="c"> Evacuate civilians</label>
+  <label><input type="radio" name="q32" value="d"> Push back infiltrators without crossing LoC</label>
+</div>
+
+<div class="question" data-q="q33">
+  <h3>33. Which Indian fighter jet was widely used in Kargil War?</h3>
+  <label><input type="radio" name="q33" value="a"> MiG-21</label>
+  <label><input type="radio" name="q33" value="b"> Mirage 2000</label>
+  <label><input type="radio" name="q33" value="c"> Sukhoi Su-30</label>
+  <label><input type="radio" name="q33" value="d"> Tejas</label>
+</div>
+
+<div class="question" data-q="q34">
+  <h3>34. What was the role of the Indian Navy during the 1971 war?</h3>
+  <label><input type="radio" name="q34" value="a"> Transport troops</label>
+  <label><input type="radio" name="q34" value="b"> Blockade Pakistani ports</label>
+  <label><input type="radio" name="q34" value="c"> Rescue civilians</label>
+  <label><input type="radio" name="q34" value="d"> Train rebels</label>
+</div>
+<div class="question" data-q="q35">
+  <h3>35. What does LoC stand for in the context of India-Pakistan conflict?</h3>
+  <label><input type="radio" name="q35" value="a"> Line of Control</label>
+  <label><input type="radio" name="q35" value="b"> Level of Command</label>
+  <label><input type="radio" name="q35" value="c"> Line of Communication</label>
+  <label><input type="radio" name="q35" value="d"> Loss of Control</label>
+</div>
+
+<div class="question" data-q="q36">
+  <h3>36. Who was the Prime Minister of India during the Kargil War?</h3>
+  <label><input type="radio" name="q36" value="a"> Indira Gandhi</label>
+  <label><input type="radio" name="q36" value="b"> Rajiv Gandhi</label>
+  <label><input type="radio" name="q36" value="c"> Atal Bihari Vajpayee</label>
+  <label><input type="radio" name="q36" value="d"> Manmohan Singh</label>
+</div>
+
+<div class="question" data-q="q37">
+  <h3>37. What was the name of the bus diplomacy initiative between India and Pakistan?</h3>
+  <label><input type="radio" name="q37" value="a"> Lahore Link</label>
+  <label><input type="radio" name="q37" value="b"> Friendship Bus</label>
+  <label><input type="radio" name="q37" value="c"> Delhi-Lahore Bus</label>
+  <label><input type="radio" name="q37" value="d"> Peace Wagon</label>
+</div>
+
+<div class="question" data-q="q38">
+  <h3>38. What led to the Kargil War in 1999?</h3>
+  <label><input type="radio" name="q38" value="a"> Indian troop movement</label>
+  <label><input type="radio" name="q38" value="b"> Pakistani intrusions into Indian territory</label>
+  <label><input type="radio" name="q38" value="c"> Nuclear test</label>
+  <label><input type="radio" name="q38" value="d"> Naval skirmish</label>
+</div>
+
+<div class="question" data-q="q39">
+  <h3>39. Which Pakistani general planned the Kargil infiltration?</h3>
+  <label><input type="radio" name="q39" value="a"> Ayub Khan</label>
+  <label><input type="radio" name="q39" value="b"> Yahya Khan</label>
+  <label><input type="radio" name="q39" value="c"> Pervez Musharraf</label>
+  <label><input type="radio" name="q39" value="d"> Raheel Sharif</label>
+</div>
+
+<div class="question" data-q="q40">
+  <h3>40. What was the result of the 1971 war?</h3>
+  <label><input type="radio" name="q40" value="a"> Stalemate</label>
+  <label><input type="radio" name="q40" value="b"> Victory for Pakistan</label>
+  <label><input type="radio" name="q40" value="c"> Creation of Bangladesh and Indian victory</label>
+  <label><input type="radio" name="q40" value="d"> United Nations ceasefire</label>
+</div>
+
+<div class="question" data-q="q41">
+  <h3>41. What is the Shimla Agreement?</h3>
+  <label><input type="radio" name="q41" value="a"> Treaty for trade</label>
+  <label><input type="radio" name="q41" value="b"> Agreement after the 1971 war</label>
+  <label><input type="radio" name="q41" value="c"> Arms deal</label>
+  <label><input type="radio" name="q41" value="d"> Peace treaty during Kargil</label>
+</div>
+
+<div class="question" data-q="q42">
+  <h3>42. When was the Lahore Declaration signed?</h3>
+  <label><input type="radio" name="q42" value="a"> 1972</label>
+  <label><input type="radio" name="q42" value="b"> 1999</label>
+  <label><input type="radio" name="q42" value="c"> 2001</label>
+  <label><input type="radio" name="q42" value="d"> 1965</label>
+</div>
+
+<div class="question" data-q="q43">
+  <h3>43. What was the codename of the Indian Navy’s blockade on Pakistan in 1971?</h3>
+  <label><input type="radio" name="q43" value="a"> Operation Python</label>
+  <label><input type="radio" name="q43" value="b"> Operation Ganga</label>
+  <label><input type="radio" name="q43" value="c"> Operation Cactus Lily</label>
+  <label><input type="radio" name="q43" value="d"> Operation Chakkar</label>
+</div>
+
+<div class="question" data-q="q44">
+  <h3>44. What was the significance of the Battle of Tololing?</h3>
+  <label><input type="radio" name="q44" value="a"> Key turning point in Kargil War</label>
+  <label><input type="radio" name="q44" value="b"> First use of tanks</label>
+  <label><input type="radio" name="q44" value="c"> Start of nuclear talks</label>
+  <label><input type="radio" name="q44" value="d"> Surrender of Pakistan</label>
+</div>
+<div class="question" data-q="q45">
+  <h3>45. Which Indian Army officer was awarded the Param Vir Chakra posthumously in the Kargil War?</h3>
+  <label><input type="radio" name="q45" value="a"> Captain Vikram Batra</label>
+  <label><input type="radio" name="q45" value="b"> General Bipin Rawat</label>
+  <label><input type="radio" name="q45" value="c"> Captain Manoj Pandey</label>
+  <label><input type="radio" name="q45" value="d"> Major Sandeep Unnikrishnan</label>
+</div>
+
+<div class="question" data-q="q46">
+  <h3>46. What was the main reason behind the Indo-Pak war of 1947-48?</h3>
+  <label><input type="radio" name="q46" value="a"> Water dispute</label>
+  <label><input type="radio" name="q46" value="b"> Territory of Kashmir</label>
+  <label><input type="radio" name="q46" value="c"> Religious conflict</label>
+  <label><input type="radio" name="q46" value="d"> Refugee crisis</label>
+</div>
+
+<div class="question" data-q="q47">
+  <h3>47. Which Indian city was targeted during the 2001 Indian Parliament attack blamed on Pakistani terrorists?</h3>
+  <label><input type="radio" name="q47" value="a"> Mumbai</label>
+  <label><input type="radio" name="q47" value="b"> Amritsar</label>
+  <label><input type="radio" name="q47" value="c"> Delhi</label>
+  <label><input type="radio" name="q47" value="d"> Srinagar</label>
+</div>
+
+<div class="question" data-q="q48">
+  <h3>48. Which Pakistani city was bombed by India in 1971?</h3>
+  <label><input type="radio" name="q48" value="a"> Karachi</label>
+  <label><input type="radio" name="q48" value="b"> Lahore</label>
+  <label><input type="radio" name="q48" value="c"> Rawalpindi</label>
+  <label><input type="radio" name="q48" value="d"> Multan</label>
+</div>
+
+<div class="question" data-q="q49">
+  <h3>49. Who was the President of Pakistan during the 1971 war?</h3>
+  <label><input type="radio" name="q49" value="a"> Ayub Khan</label>
+  <label><input type="radio" name="q49" value="b"> Pervez Musharraf</label>
+  <label><input type="radio" name="q49" value="c"> Yahya Khan</label>
+  <label><input type="radio" name="q49" value="d"> Zulfikar Ali Bhutto</label>
+</div>
+
+<div class="question" data-q="q50">
+  <h3>50. What international body often mediates India-Pakistan conflicts?</h3>
+  <label><input type="radio" name="q50" value="a"> NATO</label>
+  <label><input type="radio" name="q50" value="b"> SAARC</label>
+  <label><input type="radio" name="q50" value="c"> United Nations</label>
+  <label><input type="radio" name="q50" value="d"> ASEAN</label>
+</div>
+
+-->
+      <button type="button" onclick="submitQuiz()">SUBMIT</button>
+    </form>
+  </div>
+
+  <script>
+    const answers = {
+  q1: "a",
+  q2: "b",
+  q3: "b",
+  q4: "c",
+  q5: "c",
+  /*q6: "d",
+  q7: "b",
+  q8: "b",
+  q9: "a",
+  q10: "a",
+  q11: "a",
+  q12: "c",
+  q13: "b",
+  q14: "b",
+  q15: "b",
+  q16: "a",
+  q17: "a",
+  q18: "a",
+  q19: "b",
+  q20: "a",
+  q21: "c",
+  q22: "c",
+  q23: "b",
+  q24: "b",
+  q25: "b",
+  q26: "c",
+  q27: "a",
+  q28: "a",
+  q29: "c",
+  q30: "b",
+  q31: "c",
+  q32: "b",
+  q33: "c",
+  q34: "a",
+  q35: "c",
+  q36: "a",
+  q37: "a",
+  q38: "a",
+  q39: "b",
+  q40: "c",
+  q41: "a",
+  q42: "b",
+  q43: "c",
+  q44: "c",
+  q45: "a",
+  q46: "b",
+  q47: "c",
+  q48: "a",
+  q49: "c",
+  q50: "c"*/
+};
+
+
+    function submitQuiz() {
+      const form = document.getElementById("quiz-form");
+      const questions = document.querySelectorAll(".question");
+      let allAnswered = true;
+
+      // Clear previous styles/messages
+      questions.forEach(q => {
+        q.classList.remove("unanswered", "correct-border", "wrong-border");
+        q.querySelectorAll("label").forEach(l => {
+          l.classList.remove("correct-answer", "wrong-answer");
+        });
+        const oldNote = q.querySelector(".correct-text");
+        if (oldNote) oldNote.remove();
+      });
+
+      // Check unanswered
+      for (let question of questions) {
+        const name = question.getAttribute("data-q");
+        const selected = form.querySelector(`input[name="${name}"]:checked`);
+        if (!selected) {
+          question.classList.add("unanswered");
+          allAnswered = false;
+        }
+      }
+
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting!");
+        return;
+      }
+
+      // Check answers
+      for (let question of questions) {
+        const name = question.getAttribute("data-q");
+        const selected = form.querySelector(`input[name="${name}"]:checked`);
+        const selectedValue = selected.value;
+        const correctValue = answers[name];
+
+        if (selectedValue === correctValue) {
+          question.classList.add("correct-border");
+          selected.parentElement.classList.add("correct-answer");
+        } else {
+          question.classList.add("wrong-border");
+          selected.parentElement.classList.add("wrong-answer");
+
+          // Highlight correct option
+          const correctInput = form.querySelector(`input[name="${name}"][value="${correctValue}"]`);
+          if (correctInput) {
+            correctInput.parentElement.classList.add("correct-answer");
+          }
+
+          // Show correct text
+          const correctText = correctInput.parentElement.textContent.trim();
+          const note = document.createElement("div");
+          note.className = "correct-text";
+          note.textContent = `The correct answer is: ${correctText}`;
+          question.appendChild(note);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
